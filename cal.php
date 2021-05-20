@@ -1,81 +1,92 @@
 <?php
 
-if ( isset($_POST['peso']) && isset($_POST['altura']) && is_numeric($_POST['peso']) && is_numeric($_POST['altura']) && isset($_POST['sexo'])){
+$conexion= mysqli_connect("localhost","root","","imc"); //se hizo la conexion a la base de datos
+
+if (!$conexion=="false") {
+	echo "Algo anda mal";
+	die();
+}
+
+if ( isset($_POST['peso']) && isset($_POST['altura']) && is_numeric($_POST['peso']) && is_numeric($_POST['altura']) && isset($_POST['etapa'])){
 
     $peso=$_POST['peso'];
     $altura=$_POST['altura'];
-    $sexo=$_POST['sexo'];
+    $etapa=$_POST['etapa'];
     
     $imc=$peso/($altura*$altura);
     $imc=round($imc,1);
     $resultado="";
 
-  if ($sexo=='adulto') {
+  if ($etapa=='adulto') {
     if ( $imc<18.5){
-      $resultado = 'Bajo de peso para el '.$sexo;
+      $resultado = 'Bajo de peso para el '.$etapa;
         $color="purple";
       }   
   }
-  if ( $imc<=21.3 && $sexo=='adolescente') {
-      $resultado = "Bajo de peso para el ".$sexo;
+  if ( $imc<=21.3 && $etapa=='adolescente') {
+      $resultado = "Bajo de peso para el ".$etapa;
       $color="purple";
   }
     //adulto bajo peso
     //adolescente bajo peso
 
     //peso normal adulto
-    if ($imc >= 18.5 && $imc <= 24.9 && $sexo=='adulto'){
-    $resultado = "Peso normal para el ".$sexo;
+    if ($imc >= 18.5 && $imc <= 24.9 && $etapa=='adulto'){
+    $resultado = "Peso normal para el ".$etapa;
     $color="green";
     }
 
     //peso normal adolescente
-    if ($imc>=21.4 && $imc <= 24.8  && $sexo=='adolescente') {
-        $resultado = "Peso normal para el  ".$sexo;
+    if ($imc>=21.4 && $imc <= 24.8  && $etapa=='adolescente') {
+        $resultado = "Peso normal para el  ".$etapa;
         $color="green";
     }
 
     //sobrepeso adulto
-    if ($imc >= 24.9 && $imc <= 29.9 && $sexo=='adulto'){
-    $resultado = "Sobrepeso ".$sexo;
+    if ($imc >= 24.9 && $imc <= 29.9 && $etapa=='adulto'){
+    $resultado = "Sobrepeso ".$etapa;
     $color="orange";
     }
 
     //sobrepeso adolescente
-    if ($imc>=25 && $imc <= 29.7  && $sexo=='adolescente') {
-        $resultado = "Sobrepeso para el ".$sexo;
+    if ($imc>=25 && $imc <= 29.7  && $etapa=='adolescente') {
+        $resultado = "Sobrepeso para el ".$etapa;
         $color="orange";
     }
 
     //obesidad adolescente
-    if ($imc>=29.7  && $sexo=='adolescente') {
-        $resultado = "Obesidad para el ".$sexo;
+    if ($imc>=29.7  && $etapa=='adolescente') {
+        $resultado = "Obesidad para el ".$etapa;
         $color="red";
     }
 
     //obesidad adulto
-    if ($imc>=30 && $imc <= 34.9 && $sexo=='adulto'){
-    $resultado = "Obesidad para el ".$sexo."<br>"." Fase I ";
+    if ($imc>=30 && $imc <= 34.9 && $etapa=='adulto'){
+    $resultado = "Obesidad para el ".$etapa."<br>"." Fase I ";
     $color="red";
     }
 
-    if ($imc>=35 && $imc <= 39.9 && $sexo=='adulto'){
-    $resultado = "Obesidad para el ".$sexo."<br>"." Fase II ";
+    if ($imc>=35 && $imc <= 39.9 && $etapa=='adulto'){
+    $resultado = "Obesidad para el ".$etapa."<br>"." Fase II ";
     $color="red";
     }
 
-    if ($imc>= 40 && $sexo=='adulto'){
-    $resultado = "Obesidad para el ".$sexo."<br>".' Fase III ';
+    if ($imc>= 40 && $etapa=='adulto'){
+    $resultado = "Obesidad para el ".$etapa."<br>".' Fase III ';
     $color="red";
     }
 
+    $conexion->query ("INSERT INTO `datos`(`peso`, `altura`, `etapa`, `datos_imc`,`resultado`) VALUES ('$peso','$altura','$etapa','$imc','$resultado')");
+
+   // var_dump($resultado);//consulte el string
 }
 
-if (isset($_POST['sexo'])) {
-    $sexo=$_POST['sexo'];  
+if (isset($_POST['etapa'])) {
+    $etapa=$_POST['etapa'];  
     }else{
-        $sexo="";
+        $etapa="";
       }
+
 ?>
 
 <!DOCTYPE html>
@@ -147,10 +158,10 @@ if (isset($_POST['sexo'])) {
                         <p>Altura m </p>
                         <input type="number" name="altura" step=".01" value="<?php echo $altura?>" placeholder="Altura en Metros" required=""><br><br>
 
-                        <p>Sexo</p>
-                        <input type="radio" name="sexo" value="adolescente"<?php if ($sexo=="adolescente") echo "checked";?>>Adolescente
+                        <p>etapa</p>
+                        <input type="radio" name="etapa" value="adolescente"<?php if ($etapa=="adolescente") echo "checked";?>>Adolescente
 
-                        <input type="radio" name="sexo" value="adulto"<?php if ($sexo=='adulto') echo "checked";?> >Adulto
+                        <input type="radio" name="etapa" value="adulto"<?php if ($etapa=='adulto') echo "checked";?> >Adulto
                         <br><br>
                         <input class="btn btn-primary" type="submit" name="" value="Calcula tu IMC">
                                 </div>
