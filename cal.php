@@ -3,8 +3,8 @@
 $conexion= mysqli_connect("localhost","root","","imc"); //se hizo la conexion a la base de datos
 
 if (!$conexion=="false") {
-	echo "Algo anda mal";
-	die();
+    echo "Algo anda mal";
+    die();
 }
 
 if ( isset($_POST['peso']) && isset($_POST['altura']) && is_numeric($_POST['peso']) && is_numeric($_POST['altura']) && isset($_POST['etapa'])){
@@ -128,9 +128,9 @@ if (isset($_POST['etapa'])) {
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#!">Action</a>
+                                    <a class="dropdown-item" href="estadisticas.php">Estadisticas</a>
                                     <a class="dropdown-item" href="#!">Another action</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#!">Something else here</a>
@@ -143,6 +143,7 @@ if (isset($_POST['etapa'])) {
 
                     <h1 class="mt-4">Calcula tu IMC</h1>
                     <h5>¿En que rango estas?</h5>
+
         <form action="cal.php" method="POST">
            <div class="col-md-7 mb-5">
                     <div class="card h-90">
