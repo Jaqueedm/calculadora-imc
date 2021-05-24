@@ -1,11 +1,30 @@
 <?php
 
+//SELECT COUNT(etapa) as 'cantidad'FROM `datos` WHERE etapa='adulto'
+
 $conexion= mysqli_connect("localhost","root","","imc"); //se hizo la conexion a la base de datos
 
 if (!$conexion=="false") {
 	echo "Algo anda mal";
 	die();
 }
+
+$consulta= "SELECT AVG(`datos_imc`) AS 'imc_promedio',AVG(`peso`) AS 'peso_promedio',AVG(`altura`) AS 'altura_promedio', COUNT(*) cantidad FROM `datos` WHERE 1";
+
+$resultado = $conexion->query($consulta);
+$fila = $resultado->fetch_assoc();
+
+ //array asociativo 
+
+$imc_promedio=$fila['imc_promedio'];
+$peso_promedio=$fila['peso_promedio'];
+$altura_promedio=$fila['altura_promedio'];
+$cantidad=$fila['cantidad'];
+
+
+$resultado = $conexion->query("SELECT * FROM `datos` WHERE 1");
+$tabla = $resultado->fetch_all(MYSQLI_ASSOC);//array asociativo 
+
 
 if ( isset($_POST['peso']) && isset($_POST['altura']) && is_numeric($_POST['peso']) && is_numeric($_POST['altura']) && isset($_POST['etapa'])){
 
@@ -88,13 +107,6 @@ if (isset($_POST['etapa'])) {
       }
 
 
-$consulta= "SELECT AVG(`datos_imc`) AS 'imc_promedio',AVG(`peso`) AS 'peso_promedio',AVG(`altura`) AS 'altura_promedio', COUNT(*) cantidad FROM `datos` WHERE 1";
-
-$resultado= $conexion->query($consulta);
-$fila=$resultado->fetch_assoc();
-
-$imc_promedio=$fila[$imc_promedio];
-
 ?>
 
 <!DOCTYPE html>
@@ -153,24 +165,61 @@ $imc_promedio=$fila[$imc_promedio];
                     
         <form action="cal.php" method="POST">
            <div class="col-md-7 mb-5">
-                    <div class="card text-white bg-secondary my-5 py-4 text-center">
-                     <div class="card-body">
-                        <h5 class="text-white m-2">Promedios</h5>
+                <div class="card text-white bg-secondary my-5 py-4 text-center">
+                 <div class="card-body">
+                    <h5 class="text-white m-2">Promedios</h5>
 
-                        <p>IMC promedio: <?=$imc_promedio; ?></p>
-                        <p>peso promedio:</p>
-                        <p>altura promedio:</p>
-                        <p>etapa promedio:</p>
-                        <p>Cantidad:</p>
+                    <p>IMC promedio: <?php echo "$imc_promedio" ?></p>
+                    <p>Peso promedio: <?php echo "$peso_promedio" ?></p>
+                    <p>Altura promedio: <?php echo "$altura_promedio" ?></p>
+                    <p>Etapa promedio:</p>
+                    <p>Cantidad: <?=$cantidad ?></p>
+                 </div>
                 </div>
-                    </div>
-                                
-    
-                            </div>
-                        </div>
-                    </div>     
+             </div>
+             <hr>
+
+            <section id="contact">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-8 mx-auto">
+                    <h2>Datos generales</h2>
+
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">N.</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Altura</th>
+                            <th scope="col">Peso</th>
+                            <th scope="col">IMC</th>
+                            <th scope="col">Resultado</th>
+                            <th scope="col">Etapa</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php foreach ($tabla as $fila) { ?>
+                            <tr>
+                              <th scope="row"><?php echo $fila['id_datos'] ?></th>
+                              <td><?php echo $fila['fecha'] ?></td>
+                              <td><?php echo $fila['altura'] ?></td>
+                              <td><?php echo $fila['peso'] ?></td>
+                              <td><?php echo $fila['datos_imc'] ?></td>
+                              <td><?php echo $fila['resultado'] ?></td>
+                              <td><?php echo $fila['etapa'] ?></td>
+                            </tr>
+                          <?php } ?>
+                        </tbody>
+                      </table>
+
+                  </div>
                 </div>
+              </div>
+            </section>
+                 </div>
+                </div>     
             </div>
+        </div>
     </form><br>
     </div>
                 </div>
